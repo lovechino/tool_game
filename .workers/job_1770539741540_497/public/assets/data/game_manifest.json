@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "title": "New Game",
+    "version": "1.0.0"
+  },
+  "common": {
+    "board": "assets/reskin/common_board.png"
+  },
+  "scenes": {
+    "scene1": {
+      "banner": "assets/reskin/s1_banner.png",
+      "textBanner": "assets/reskin/s1_text_banner.png",
+      "board": "assets/reskin/s1_board.png",
+      "bubble": "assets/reskin/s1_bubble.png",
+      "refImage": "assets/reskin/s1_example.png",
+      "resultBg": "assets/reskin/s1_result_bg.png",
+      "items": [
+        {
+          "key": "s1_item_1_wrong",
+          "path": "assets/reskin/s1_item_1_wrong.png",
+          "isCorrect": false
+        },
+        {
+          "key": "s1_item_2_wrong",
+          "path": "assets/reskin/s1_item_2_wrong.png",
+          "isCorrect": false
+        },
+        {
+          "key": "s1_item_3_correct",
+          "path": "assets/reskin/s1_item_3_correct.png",
+          "isCorrect": true
+        }
+      ],
+      "poem": "assets/reskin/s1_poem.png",
+      "textResult": "assets/reskin/s1_text_result.png"
+    },
+    "scene2": {
+      "banner": "assets/reskin/s2_banner.png",
+      "textBanner": "assets/reskin/s2_text_banner.png",
+      "board": "assets/reskin/s2_board.png",
+      "footerText": "assets/reskin/s2_text_footer.png",
+      "outlines": [
+        {
+          "key": "s2_outline_1",
+          "path": "assets/reskin/s2_outline_1.png"
+        },
+        {
+          "key": "s2_outline_2",
+          "path": "assets/reskin/s2_outline_2.png"
+        }
+      ],
+      "parts": {
+        "group1": [
+          {
+            "key": "s2_part_1_oc_1",
+            "path": "assets/reskin/s2_part_1_oc_1.png"
+          },
+          {
+            "key": "s2_part_1_oc_2",
+            "path": "assets/reskin/s2_part_1_oc_2.png"
+          }
+        ],
+        "group2": [
+          {
+            "key": "s2_part_2_body",
+            "path": "assets/reskin/s2_part_2_body.png"
+          }
+        ]
+      }
+    }
+  },
+  "audio": {
+    "bgm": "assets/audio/sfx/nhac_nen.mp3"
+  }
+}

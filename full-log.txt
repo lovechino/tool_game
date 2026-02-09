@@ -1,0 +1,46 @@
+﻿Generating game manifest...
+Manifest saved to E:\pack-studio\public\assets\data\game_manifest.json
+
+≡ƒÄ» Calculating scales for Goalkeeper parts (Group 1)...
+≡ƒôÉ Auto-fit: s2_part_1_oc_1.png ΓåÆ s2_outline_1.png
+   Outline: 1136x638, Part: 1136x638
+   Calculated scale: 1.000
+   Γ£à s2_part_1_oc_1: scaleAdjust = 1
+≡ƒôÉ Auto-fit: s2_part_1_oc_2.png ΓåÆ s2_outline_1.png
+   Outline: 1136x638, Part: 1136x638
+   Calculated scale: 1.000
+   Γ£à s2_part_1_oc_2: scaleAdjust = 1
+≡ƒôÉ Auto-fit: s2_part_1_oc_3.png ΓåÆ s2_outline_1.png
+   Outline: 1136x638, Part: 1136x638
+   Calculated scale: 1.000
+   Γ£à s2_part_1_oc_3: scaleAdjust = 1
+≡ƒôÉ Auto-fit: s2_part_1_oc_4.png ΓåÆ s2_outline_1.png
+   Outline: 1136x638, Part: 1136x638
+   Calculated scale: 1.000
+   Γ£à s2_part_1_oc_4: scaleAdjust = 1
+≡ƒôÉ Auto-fit: s2_part_1_oc_5.png ΓåÆ s2_outline_1.png
+   Outline: 1136x638, Part: 1136x638
+   Calculated scale: 1.000
+   Γ£à s2_part_1_oc_5: scaleAdjust = 1
+≡ƒôÉ Auto-fit: s2_part_1_oc_6.png ΓåÆ s2_outline_1.png
+   Outline: 1136x638, Part: 1136x638
+   Calculated scale: 1.000
+   Γ£à s2_part_1_oc_6: scaleAdjust = 1
+≡ƒôÉ Auto-fit: s2_part_1_oc_7.png ΓåÆ s2_outline_1.png
+   Outline: 1136x638, Part: 1136x638
+   Calculated scale: 1.000
+   Γ£à s2_part_1_oc_7: scaleAdjust = 1
+≡ƒôÉ Auto-fit: s2_part_1_oc_8.png ΓåÆ s2_outline_1.png
+   Outline: 1136x638, Part: 1136x638
+   Calculated scale: 1.000
+   Γ£à s2_part_1_oc_8: scaleAdjust = 1
+≡ƒôÉ Auto-fit: s2_part_1_ody.png ΓåÆ s2_outline_1.png
+   Outline: 1136x638, Part: 1136x638
+   Calculated scale: 1.000
+   Γ£à s2_part_1_ody: scaleAdjust = 1
+
+≡ƒÄ» Calculating scales for Letter parts (Group 2)...
+≡ƒôÉ Auto-fit: s2_part_2_body.png ΓåÆ s2_outline_2.png
+   Outline: 381x682, Part: 365x661
+   Calculated scale: 1.032
+Level Config updated and saved to E:\pack-studio\public\assets\data\level_s2_config.json

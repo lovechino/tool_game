@@ -1,0 +1,167 @@
+diff --git a/src/scenes/components/LevelLoader.ts b/src/scenes/components/LevelLoader.ts
+index 4f77d1a..2e3bb8a 100644
+--- a/src/scenes/components/LevelLoader.ts
++++ b/src/scenes/components/LevelLoader.ts
+@@ -78,19 +78,30 @@ function spawnParts(
+         const cx = GameUtils.getW(scene) * baseXPct;
+         const cy = GameUtils.getH(scene) * baseYPct;
+ 
+         const scaleAdjust = part.scaleAdjust !== undefined ? part.scaleAdjust : 1;
+-        const scale = part.scale || baseScale || 1.0;
++
++        // ✅ IMPORTANT:
++        // - baseScale (autoScales group1/group2) is the OUTLINE scale (responsive)
++        // - part.scale (if present) should be a MULTIPLIER for the PART size only
++        // Offsets/hints must scale with outlineScale, NOT with partScale.
++        const outlineScale = baseScale || 1.0;
++        const partScaleMul = part.scale !== undefined ? part.scale : 1.0;
++        const scale = outlineScale * partScaleMul;
+ 
+-        // Apply scale to offsets to make them responsive
+-        const layerX = cx + (part.offsetX || 0) * scale;
+-        const layerY = cy + (part.offsetY || 0) * scale;
++        // ✅ Offsets scale with OUTLINE scale (responsive)
++        const layerX = cx + (part.offsetX || 0) * outlineScale;
++        const layerY = cy + (part.offsetY || 0) * outlineScale;
+ 
+         const hitArea = paintManager.createPaintableLayer(layerX, layerY, part.key, scale, id, scaleAdjust);
+ 
+         hitArea.setData('hintX', part.hintX || 0);
+         hitArea.setData('hintY', part.hintY || 0);
+         hitArea.setData('originScale', scale);
++        hitArea.setData('outlineScale', outlineScale);
+         hitArea.setData('baseX', cx);
+         hitArea.setData('baseY', cy);
+         hitArea.setData('partKey', part.key);
+         hitArea.setData('partId', id);
+ 
+         map.set(id, hitArea);
+diff --git a/src/scenes/Scene2.ts b/src/scenes/Scene2.ts
+index 8a8ad83..f0b6d3a 100644
+--- a/src/scenes/Scene2.ts
++++ b/src/scenes/Scene2.ts
+@@ -231,11 +231,16 @@ export default class Scene2 extends Phaser.Scene {
+             onComplete: () => { this.activeHintTween = null; this.idleManager.reset(); }
+         });
+ 
+-        const scale = target.getData('originScale') || 1;
+-        const hX = (target.getData('hintX') || 0) * scale;
+-        const hY = (target.getData('hintY') || 0) * scale;
++        // ✅ Hints should follow OUTLINE scale (responsive),
++        // not the part's originScale (which includes part.scale multiplier).
++        const outlineScale = target.getData('outlineScale') || target.getData('originScale') || 1;
++        const hX = (target.getData('hintX') || 0) * outlineScale;
++        const hY = (target.getData('hintY') || 0) * outlineScale;
+         const cx = target.getData('baseX');
+         const cy = target.getData('baseY');
+ 
+         const destX = cx + hX;
+         const destY = cy + hY;
+diff --git a/src/scenes/components/Scene2Debug.ts b/src/scenes/components/Scene2Debug.ts
+index 1c1f8aa..6e9a2c7 100644
+--- a/src/scenes/components/Scene2Debug.ts
++++ b/src/scenes/components/Scene2Debug.ts
+@@ -12,20 +12,24 @@ export class Scene2Debug {
+         console.log(`[DEBUG] Selected part: ${target.getData('partId')}`);
+ 
+         // Show hand at current hint pos
+         const hX = target.getData('hintX');
+         const hY = target.getData('hintY');
+         const cx = target.getData('baseX');
+         const cy = target.getData('baseY');
+ 
+-        const worldX = cx + hX;
+-        const worldY = cy + hY;
++        // ✅ hint is unscaled units -> convert to world by OUTLINE scale
++        const outlineScale = target.getData('outlineScale') || target.getData('originScale') || 1;
++        const worldX = cx + hX * outlineScale;
++        const worldY = cy + hY * outlineScale;
+ 
+         handHint.setPosition(worldX, worldY).setAlpha(1).setScale(0.7).setDepth(300);
+ 
+         // Enable drag on hand
+         handHint.setInteractive({ draggable: true });
+         scene.input.setDraggable(handHint);
+ 
+         handHint.off('drag');
+         handHint.on('drag', (pointer: Phaser.Input.Pointer, dragX: number, dragY: number) => {
+             handHint.setPosition(dragX, dragY);
+ 
+             // Calculate new relative hint position
+-            const scale = target.getData('originScale') || 1;
+-            const newHintX = Math.round((dragX - cx) / scale);
+-            const newHintY = Math.round((dragY - cy) / scale);
++            const outlineScale = target.getData('outlineScale') || target.getData('originScale') || 1;
++            const newHintX = Math.round((dragX - cx) / outlineScale);
++            const newHintY = Math.round((dragY - cy) / outlineScale);
+ 
+             console.log(`Hint Pos: x=${newHintX}, y=${newHintY}`);
+             target.setData('hintX', newHintX);
+             target.setData('hintY', newHintY);
+         });
+     }
+ 
+     static debugShowAllHints(scene: Phaser.Scene, partsMap: Map<string, Phaser.GameObjects.Image>) {
+         console.log("--- DEBUG HINTS (INTERACTIVE) ---");
+ 
+         partsMap.forEach((part, id) => {
+-            const scale = part.getData('originScale') || 1;
+-            const hX = (part.getData('hintX') || 0) * scale;
+-            const hY = (part.getData('hintY') || 0) * scale;
++            const outlineScale = part.getData('outlineScale') || part.getData('originScale') || 1;
++            const hX = (part.getData('hintX') || 0) * outlineScale;
++            const hY = (part.getData('hintY') || 0) * outlineScale;
+             const cx = part.getData('baseX');
+             const cy = part.getData('baseY');
+ 
+             const destX = cx + hX;
+             const destY = cy + hY;
+ 
+             console.log(`[INIT] Hint for ${id}: x=${destX}, y=${destY} (global offset: ${hX}, ${hY})`);
+@@ -52,10 +56,10 @@ export class Scene2Debug {
+             });
+ 
+             debugPoint.on('dragend', () => {
+-                const scale = part.getData('originScale') || 1;
+-                const newHintX = Math.round((debugPoint.x - cx) / scale);
+-                const newHintY = Math.round((debugPoint.y - cy) / scale);
++                const outlineScale = part.getData('outlineScale') || part.getData('originScale') || 1;
++                const newHintX = Math.round((debugPoint.x - cx) / outlineScale);
++                const newHintY = Math.round((debugPoint.y - cy) / outlineScale);
+ 
+                 console.log(`%c[UPDATED] ${id} => hintX: ${newHintX}, hintY: ${newHintY}`, "color: #00ff00; font-weight: bold");
+ 
+                 part.setData('hintX', newHintX);
+@@ -86,10 +90,10 @@ export class Scene2Debug {
+             });
+ 
+             part.on('dragend', () => {
+-                const scale = part.getData('originScale') || 1;
+-                const newOffsetX = Math.round((part.x - cx) / scale);
+-                const newOffsetY = Math.round((part.y - cy) / scale);
++                const outlineScale = part.getData('outlineScale') || part.getData('originScale') || 1;
++                const newOffsetX = Math.round((part.x - cx) / outlineScale);
++                const newOffsetY = Math.round((part.y - cy) / outlineScale);
+ 
+                 console.log(`%c[UPDATED OFFSET] "${id}": { offsetX: ${newOffsetX}, offsetY: ${newOffsetY} }`, "color: #00ffff; font-weight: bold");
+ 
+                 part.setData('offsetX', newOffsetX);
+                 part.setData('offsetY', newOffsetY);
+             });
+         });
+     }
+@@ -116,8 +120,10 @@ export class Scene2Debug {
+             const cx = hitArea.getData('baseX');
+             const cy = hitArea.getData('baseY');
+ 
+-            const offsetX = Math.round(hitArea.x - cx);
+-            const offsetY = Math.round(hitArea.y - cy);
++            // ✅ IMPORTANT: dump must output UN-SCALED offsets (responsive)
++            const outlineScale = hitArea.getData('outlineScale') || hitArea.getData('originScale') || 1;
++            const offsetX = Math.round((hitArea.x - cx) / outlineScale);
++            const offsetY = Math.round((hitArea.y - cy) / outlineScale);
+ 
+             // Find in goalkeeper
+             let found = false;
+             // eslint-disable-next-line @typescript-eslint/no-explicit-any
+             if (fullConfig.goalkeeper && fullConfig.goalkeeper.parts) {

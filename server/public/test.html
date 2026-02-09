@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Server Test</title>
+</head>
+
+<body>
+    <h1>✅ Server đang hoạt động BÌNH THƯỜNG!</h1>
+    <p>Nếu bạn thấy trang này, server đang chạy tốt.</p>
+    <button onclick="testAPI()">Test API Upload</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing...';
+
+            try {
+                const response = await fetch('/create-game', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ test: true })
+                });
+
+                resultDiv.innerHTML = `✅ Server responded! Status: ${response.status}`;
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Error: ${error.message}`;
+                console.error('Full error:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>

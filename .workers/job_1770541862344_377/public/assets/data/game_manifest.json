@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "title": "New Game",
+    "version": "1.0.0"
+  },
+  "common": {},
+  "scenes": {
+    "scene1": {
+      "banner": "assets/reskin/s1_banner.png",
+      "textBanner": "assets/reskin/s1_text_banner.png",
+      "board": "assets/reskin/s1_board.png",
+      "bubble": "assets/reskin/s1_bubble.png",
+      "refImage": "assets/reskin/s1_ref_image.png",
+      "resultBg": "assets/reskin/s1_result_bg.png",
+      "items": []
+    },
+    "scene2": {
+      "banner": "assets/reskin/s2_banner.png",
+      "textBanner": "assets/reskin/s2_text_banner.png",
+      "board": "assets/reskin/s2_board.png",
+      "footerText": "assets/reskin/s2_text_footer.png",
+      "outlines": [],
+      "parts": {
+        "group1": [],
+        "group2": []
+      }
+    }
+  },
+  "audio": {
+    "bgm": "assets/audio/sfx/nhac_nen.mp3"
+  }
+}
